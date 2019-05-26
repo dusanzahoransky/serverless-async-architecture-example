@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDirs": [
+      "src",
+      "test"
+    ],
+    "target": "es6",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,             /* will generate TS file which will be helpful for debugging purposes */
+    "strictNullChecks": true,      /* enable strict null checks and prevent compilation for possible null variables */
+    "noUnusedParameters": true,    /* report errors on unused parameters and prevent compilation */
+    "lib": [
+      "es6"
+    ],
+    "moduleResolution": "node"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

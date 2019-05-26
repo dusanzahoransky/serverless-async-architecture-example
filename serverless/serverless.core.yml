@@ -1,0 +1,39 @@
+service: HelloWorld
+
+${tfile:../node_modules/@rezdy/serverless/package/nodejs.yml}
+
+provider:
+  ${tfile:../node_modules/@rezdy/serverless/provider/nodejs.yml}
+  # TODO if deployed inside VPC
+  #${tfile:../node_modules/@rezdy/serverless/provider/vpc.yml}
+  environment:
+    ENV: ${self:provider.stage}
+    REZDY_BUSINESS_CLIENT_LOGIN: ${self:custom.config.REZDY_BUSINESS_CLIENT_LOGIN}
+    REZDY_BUSINESS_CLIENT_PASSWORD: ${self:custom.config.REZDY_BUSINESS_CLIENT_PASSWORD}
+    REZDY_BUSINESS_CLIENT_URL: ${self:custom.config.REZDY_BUSINESS_CLIENT_URL}
+    # TODO if DynamoDB table
+    #SVC_HELLOWORLD_HELLOWORLD_TABLE: ${self:provider.stage}-HelloWorld
+
+  # TODO if DynamoDB
+  #iamRoleStatements:
+  #${tfile:../node_modules/@rezdy/serverless/iamRoleStatements/dynamoDbFull.yml:tableName=HelloWorld}
+functions:
+  getHelloWorld:
+    handler: dist/src/HelloWorldRestHandler.get
+    events:
+    # TODO if API Gateway
+    #- http:
+    #    path: /helloWorld/{helloWorldId}
+    #    method: get
+
+custom:
+  # TODO if deployed inside VPC
+  #${tfile:../node_modules/@rezdy/serverless/custom/vpc.yml}
+  config:
+    ${file(./config/${self:provider.stage}.json)}
+
+resources:
+  Resources:
+    #TODO if DynamoDB
+    #${tfile:../node_modules/@rezdy/serverless/resources/dynamoDb.yml:tableName=HelloWorld}
+    #TODO DynamoDB table attributes
