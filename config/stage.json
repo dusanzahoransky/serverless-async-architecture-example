@@ -1,0 +1,5 @@
+{
+    "REZDY_BUSINESS_CLIENT_LOGIN": "${ssm:/project/stage/BUSINESS_LOGIN}",
+    "REZDY_BUSINESS_CLIENT_PASSWORD": "${ssm:/project/stage/BUSINESS_PASSWORD~true}",
+    "REZDY_BUSINESS_CLIENT_URL": "${ssm:/project/stage/BUSINESS_URL}"
+}
