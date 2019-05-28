@@ -15,21 +15,15 @@
     "dist"
   ],
   "dependencies": {
-    "@rezdy/serverless": "^1.0.8",
-    "@rezdy/ts-aws-utils": "1.1.1",
-    "@rezdy/ts-http-client": "^1.1.3",
-    "@rezdy/ts-rezdy-logger": "^1.0.6",
-    "aws-sdk": "^2.419.0",
-    "reusable-serverless-template": "^1.1.1"
-  },
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.22",
-    "@types/jest": "^24.0.11",
-    "@types/node": "^8.10.43",
-    "jest": "^24.4.0",
+    "@rezdy/serverless": "^1.2.1",
+    "serverless-fragments": "^2.2.0",
+    "@types/jest": "^24.0.9",
+    "@types/node": "^8.0.57",
+    "jest": "^24.1.0",
     "ts-jest": "^24.0.0",
     "typescript": "^3.3.3333"
   },
+  "devDependencies": {},
   "publishConfig": {
     "registry": "https://nexus.tools.rezdy.com/repository/rc-npm-private/"
   },
