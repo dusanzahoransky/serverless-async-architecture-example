@@ -1,39 +1,34 @@
-service: HelloWorld
-
-${tfile:../node_modules/@rezdy/serverless/package/nodejs.yml}
+service: OTA 1 real-time updates
 
 provider:
-  ${tfile:../node_modules/@rezdy/serverless/provider/nodejs.yml}
-  # TODO if deployed inside VPC
-  #${tfile:../node_modules/@rezdy/serverless/provider/vpc.yml}
+  ${tfile:../node_modules/@rezdy/serverless/provider/nodejs.yml}:
   environment:
     ENV: ${self:provider.stage}
-    REZDY_BUSINESS_CLIENT_LOGIN: ${self:custom.config.REZDY_BUSINESS_CLIENT_LOGIN}
-    REZDY_BUSINESS_CLIENT_PASSWORD: ${self:custom.config.REZDY_BUSINESS_CLIENT_PASSWORD}
-    REZDY_BUSINESS_CLIENT_URL: ${self:custom.config.REZDY_BUSINESS_CLIENT_URL}
-    # TODO if DynamoDB table
-    #SVC_HELLOWORLD_HELLOWORLD_TABLE: ${self:provider.stage}-HelloWorld
-
-  # TODO if DynamoDB
-  #iamRoleStatements:
-  #${tfile:../node_modules/@rezdy/serverless/iamRoleStatements/dynamoDbFull.yml:tableName=HelloWorld}
+    API_OTA1_PRIVATE_KEY_REALTIME_UPDATES: ${ssm:/api/${opt:stage}/api-ota1/API_OTA1_PRIVATE_KEY_REALTIME_UPDATES~true}
+    API_OTA1_COMPANY_ID: ${ssm:/api/${opt:stage}/api-ota1/API_OTA1_COMPANY_ID}
+    
 functions:
-  getHelloWorld:
-    handler: dist/src/HelloWorldRestHandler.get
+  OrderStatusUpdated:
+    handler: com.rezdy.ot1.relatimeupdates.OrderStatusUpdated
+    timeout: 10 #a first call after a cold start might take a bit longer
+    environment:
     events:
-    # TODO if API Gateway
-    #- http:
-    #    path: /helloWorld/{helloWorldId}
-    #    method: get
-
-custom:
-  # TODO if deployed inside VPC
-  #${tfile:../node_modules/@rezdy/serverless/custom/vpc.yml}
-  config:
-    ${file(./config/${self:provider.stage}.json)}
+    - sqs:
+        batchSize: 1  #keep as 1 if not processed as batch
+        arn:
+          Fn::ImportValue: sns-${self:provider.stage}-SnsOrderUpdated
 
 resources:
   Resources:
-    #TODO if DynamoDB
-    #${tfile:../node_modules/@rezdy/serverless/resources/dynamoDb.yml:tableName=HelloWorld}
-    #TODO DynamoDB table attributes
+    #SQS Ota1OrderStatusUpdated
+    ${tfile:../node_modules/@rezdy/serverless/resources/sqsQueue.yml:queueName=ApiOta1OrderStatusUpdated,delaySeconds=0}:
+    ${tfile:../node_modules/@rezdy/serverless/resources/snsSqsSubscriptionPolicySingleTopic.yml:subscriptionName=SqsOrderStatusUpdatedPolicy,queueName=ApiOta1OrderStatusUpdated,topicName=sns-${self:provider.stage}-SnsOrderUpdated}:
+
+    #subscription SQS Ota1OrderStatusUpdated to SNS OrderUpdatedTopicSubscription
+    ${tfile:../node_modules/@rezdy/serverless/resources/snsSqsSubscription.yml:queueName=ApiOta1OrderStatusUpdated,topicName=sns-${self:provider.stage}-SnsOrderUpdated,subscriptionName=OrderUpdatedTopicSubscription}:
+        FilterPolicy:
+          event:
+          - "ORDER_STATUS_UPDATED"
+          resellerId:
+          - ${self:provider.environment.API_OTA1_COMPANY_ID}
+
