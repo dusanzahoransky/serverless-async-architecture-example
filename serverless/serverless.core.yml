@@ -1,4 +1,4 @@
-service: OTA 1 real-time updates
+service: Ota1RealTimeUpdates
 
 provider:
   ${tfile:../node_modules/@rezdy/serverless/provider/nodejs.yml}:
