@@ -16,12 +16,7 @@
   ],
   "dependencies": {
     "@rezdy/serverless": "^1.2.1",
-    "serverless-fragments": "^2.2.0",
-    "@types/jest": "^24.0.9",
-    "@types/node": "^8.0.57",
-    "jest": "^24.1.0",
-    "ts-jest": "^24.0.0",
-    "typescript": "^3.3.3333"
+    "serverless-fragments": "^2.2.0"
   },
   "devDependencies": {},
   "publishConfig": {
