@@ -129,5 +129,3 @@ resources:
           - "ORDER_STATUS_UPDATED"
           resellerId:
           - ${self:provider.environment.API_OTA1_COMPANY_ID}
-
-
